@@ -20,11 +20,14 @@ public class User implements TwitterUsers, Observer{
 	private static int numOfUsers = 0;
 	private HashMap<String, String> following;
 	private List<User> followers;
+	TwitterNewsFeed twitterNewsFeed;
 
 	User(String id){
 		this.id = id;
 		this.following = new HashMap<String, String>();
 		this.followers = new ArrayList<User>();
+		
+		this.twitterNewsFeed = new TwitterNewsFeed();
 		numOfUsers++;
 	}
 	
@@ -66,10 +69,13 @@ public class User implements TwitterUsers, Observer{
 	}
 	
 	@Override
-	public void update(Message message) {
-		System.out.println(getId() + ":" + message.getMessageContent());
-		
-		
+	public void update(String message) {
+		if(message == null) {
+			System.out.println("No message");
+		}
+		else {
+			System.out.println(getId() + ":" + message);
+		}
 	}
 
 }

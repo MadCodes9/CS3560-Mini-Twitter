@@ -19,12 +19,12 @@ public class Driver {
 		
 		p.attach(s1);
 		p.attach(s2);
-		p.notifyObservers(new Message("First Message"));   //s1 and s2 will receive the update
+		p.postMessage("Hello there");
+		p.notifyObservers();   //s1 and s2 will receive the update
+//		s1.update("New Post");
+//		s2.update("Hi there!");
 		
-		s1.update(new Message("New Post"));
-		s2.update(new Message("Hi there!"));
-		
-		admin.totalNum();
+//		admin.totalNum();
 	
 	}
 
