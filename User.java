@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 //2. A user has 1) an unique ID; 2) a list of user IDs that are following this user (followers); 3)
@@ -14,19 +15,26 @@ import java.util.List;
 
 //Uses composite pattern//leaf class
 
-public class User implements TwitterUsers{
+public class User implements TwitterUsers, Observer{
 	private String id;
-	private int numOfUsers = 0;
-	private List<String> followers;
-	private List<User> following;
-	private TwitterNewsFeed twitterNewsFeed;
+	private static int numOfUsers = 0;
+	private HashMap<String, String> following;
+	private List<User> followers;
 
 	User(String id){
 		this.id = id;
-		this.numOfUsers += 1;
-		followers = new ArrayList<String>();
-		following = new ArrayList<User>();
-		twitterNewsFeed = new TwitterNewsFeed();
+		this.following = new HashMap<String, String>();
+		this.followers = new ArrayList<User>();
+		numOfUsers++;
+	}
+	
+	/*
+	 * Return the total number 
+	 * return integer
+	*/
+	@Override
+	public void totalNum() {
+		System.out.println(String.valueOf(getTotalNum()));
 	}
 	
 	/*
@@ -40,44 +48,28 @@ public class User implements TwitterUsers{
 	/*
 	 * Setter method for user id 
 	 * @param id  unique user id 
-	 * return String
 	*/
 	public void setId(String id) {
 		this.id = id;
 	}
 	
 	/*
-	 * Display the twitter news feed
-	*/
-	public void displayNewsFeed() {
-		twitterNewsFeed.getNewsFeed();
-	}
-	
-	/*
-	 * User follows another user
+	 * Current user follows another user
 	*/
 	public void follow(String id) {
-		followers.add(id);
+		following.put(getId(), id);
 	}
 	
-	public void post(String msg) {
-		
-	}
 	
 	public int getTotalNum() {
-		return this.numOfUsers;
+		return numOfUsers;
 	}
-
-	/*
-	 * Return the total number 
-	 * return integer
-	*/
+	
 	@Override
-	public void totalNum() {
-		System.out.println(String.valueOf(getTotalNum()));
+	public void update(Message message) {
+		System.out.println(getId() + ":" + message.getMessageContent());
+		
+		
 	}
-	
-	
-
 
 }

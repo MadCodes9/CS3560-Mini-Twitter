@@ -1,11 +1,4 @@
-
-public class Observer {
-
-	public void post() {
-		
-	}
-	public void update() {
-			
-	}
-	
+//Observer pattern
+public interface Observer {
+	public void update(Message message);
 }

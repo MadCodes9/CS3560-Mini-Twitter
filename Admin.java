@@ -42,9 +42,11 @@ public class Admin implements TwitterUsers{
 	@Override
 	public void totalNum() {
 		//childUsers.forEach(TwitterUsers::totalNum);
-		users.forEach(TwitterUsers::totalNum);
-		userGroups.forEach(TwitterUsers::totalNum);
-		System.out.print(childUsers.size());
+//		users.forEach(TwitterUsers::totalNum);
+//		userGroups.forEach(TwitterUsers::totalNum);
+		System.out.println("User Size: " + users.size());
+		System.out.println("User Group Size: " + userGroups.size());
+		System.out.println(childUsers.size());
 		
 	}
 

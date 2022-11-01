@@ -7,11 +7,11 @@
 //Uses composite pattern//leaf class
 public class UserGroup implements TwitterUsers{
 	private String id;
-	private int numOfUserGroups = 0;
+	private static int numOfUserGroups = 0;
 
 	UserGroup(String id){
 		this.id = id;
-		this.numOfUserGroups += 1;
+		numOfUserGroups ++;
 	}
 	public String getId() {
 		return id;
@@ -22,7 +22,7 @@ public class UserGroup implements TwitterUsers{
 	}
 	
 	public int getTotalNum() {
-		return this.numOfUserGroups;
+		return numOfUserGroups;
 	}
 
 
