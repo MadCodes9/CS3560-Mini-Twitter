@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 //2. A user has 1) an unique ID; 2) a list of user IDs that are following this user (followers); 3)
 //a list of user IDs being followed by this user (followings); 4) a news feed list containing a
 //list of Twitter messages.
@@ -15,14 +17,15 @@ import java.util.List;
 
 //Uses composite pattern//leaf class
 
-public class User implements TwitterUsers, Observer{
+public class User extends DefaultMutableTreeNode implements TwitterUsers, Observer{
 	private String id;
 	private static int numOfUsers = 0;
 	private HashMap<String, String> following;
 	private List<User> followers;
 	TwitterNewsFeed twitterNewsFeed;
 
-	User(String id){
+	public User(String id){
+		super();
 		this.id = id;
 		this.following = new HashMap<String, String>();
 		this.followers = new ArrayList<User>();
@@ -45,6 +48,13 @@ public class User implements TwitterUsers, Observer{
 	 * return String
 	*/
 	public String getId() {
+		return this.id;
+	}
+	
+	/*
+	 * This is to show id on the Tree View
+	 */
+	public String toString() {
 		return this.id;
 	}
 	
