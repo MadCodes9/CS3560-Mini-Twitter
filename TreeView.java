@@ -66,17 +66,18 @@ public class TreeView extends JPanel implements ActionListener {
     private DynamicTree treePanel;
     private Admin adminInstance;
     
-    JButton addUserButton;
-    JTextField addUserTextField;
+    private JButton addUserButton;
+    private JTextField addUserTextField;
     
-    JButton addGroupButton;
-    JTextField addGroupTextField;
+    private JButton addGroupButton;
+    private JTextField addGroupTextField;
     
-    JButton userViewButton;
-    JButton userTotalButton;
-    JButton groupTotalButton;
-    JButton messageTotalButton;
-    JButton percentageButton;
+    private JButton userViewButton;
+    private JButton userTotalButton;
+    private JButton groupTotalButton;
+    private JButton messageTotalButton;
+    private JButton percentageButton;
+
  
     public TreeView() {
         super(new BorderLayout());
@@ -146,19 +147,23 @@ public class TreeView extends JPanel implements ActionListener {
         add(treePanel, BorderLayout.CENTER);
  
         JPanel panel = new JPanel(new GridLayout(0,3));
+        JPanel panel2 = new JPanel();
+        panel2.setPreferredSize(new Dimension(300,150));
+        
 //        panel.add(addButton);
         panel.add(removeButton); 
         panel.add(clearButton);
-        panel.add(addUserButton);
-        panel.add(addUserTextField);
-        panel.add(addGroupButton);
-        panel.add(addGroupTextField);
-        panel.add(userViewButton);
-        panel.add(userTotalButton);
-        panel.add(groupTotalButton);
-        panel.add(messageTotalButton);
-        panel.add(percentageButton);
-        add(panel, BorderLayout.SOUTH);       
+        panel2.add(addUserButton);
+        panel2.add(addUserTextField);
+        panel2.add(addGroupButton);
+        panel2.add(addGroupTextField);
+        panel2.add(userViewButton);
+        panel2.add(userTotalButton);
+        panel2.add(groupTotalButton);
+        panel2.add(messageTotalButton);
+        panel2.add(percentageButton);
+        add(panel, BorderLayout.SOUTH);  
+        add(panel2, BorderLayout.EAST);
     }
     
     public void populateTree(DynamicTree treePanel) {        
