@@ -46,6 +46,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -103,34 +104,39 @@ public class TreeView extends JPanel implements ActionListener {
         
         //User Button 
         addUserButton = new JButton("Add User");
+        addUserButton.setPreferredSize(new Dimension(100, 30));
         addUserButton.addActionListener(this);
         
         //User Text Field 
         addUserTextField = new JTextField();
-        addUserTextField.setPreferredSize(new Dimension(250, 40));
+        addUserTextField.setPreferredSize(new Dimension(150, 30));
         addUserTextField.setForeground(Color.gray);
         addUserTextField.setText("User Id");
         
         //Group Button 
         addGroupButton = new JButton("Add Group");
+        addGroupButton.setPreferredSize(new Dimension(100, 30));
         addGroupButton.addActionListener(this);
         
         //Group Text Field
         addGroupTextField = new JTextField();
-        addGroupTextField.setPreferredSize(new Dimension(250, 40));
+        addGroupTextField.setPreferredSize(new Dimension(150, 30));
         addGroupTextField.setForeground(Color.gray);
         addGroupTextField.setText("Group Id");
 
         //User View Button 
         userViewButton = new JButton("Open User View");
+        userViewButton.setPreferredSize(new Dimension(250, 30));
         userViewButton.addActionListener(this);
         
         //User Total Button
         userTotalButton = new JButton("Show User Total");
+        userTotalButton.setPreferredSize(new Dimension(150, 30));
         userTotalButton.addActionListener(this);
         
         //Group Total Button
         groupTotalButton = new JButton("Show Group Total");
+        groupTotalButton.setPreferredSize(new Dimension(150, 30));
         groupTotalButton.addActionListener(this);
         
         //Message Total Button
@@ -148,7 +154,7 @@ public class TreeView extends JPanel implements ActionListener {
  
         JPanel panel = new JPanel(new GridLayout(0,3));
         JPanel panel2 = new JPanel();
-        panel2.setPreferredSize(new Dimension(300,150));
+        panel2.setPreferredSize(new Dimension(350,300));
         
 //        panel.add(addButton);
         panel.add(removeButton); 
