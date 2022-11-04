@@ -60,7 +60,7 @@ public class DynamicTree extends JPanel {
          
         rootNode = new DefaultMutableTreeNode("Root");
         treeModel = new DefaultTreeModel(rootNode);
-    treeModel.addTreeModelListener(new MyTreeModelListener());
+        treeModel.addTreeModelListener(new MyTreeModelListener());
         tree = new JTree(treeModel);
         tree.setEditable(true);
         tree.getSelectionModel().setSelectionMode
@@ -114,19 +114,15 @@ public class DynamicTree extends JPanel {
         return addObject(parent, child, false);
     }
  
-    public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent,
-                                            Object child, 
-                                            boolean shouldBeVisible) {
-        DefaultMutableTreeNode childNode = 
-                new DefaultMutableTreeNode(child);
+    public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent, Object child, boolean shouldBeVisible) {
+        DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
  
         if (parent == null) {
             parent = rootNode;
         }
      
     //It is key to invoke this on the TreeModel, and NOT DefaultMutableTreeNode
-        treeModel.insertNodeInto(childNode, parent, 
-                                 parent.getChildCount());
+        treeModel.insertNodeInto(childNode, parent, parent.getChildCount());
  
         //Make sure the user can see the lovely new node.
         if (shouldBeVisible) {
@@ -135,6 +131,11 @@ public class DynamicTree extends JPanel {
         return childNode;
     }
  
+    //Return currently selected node
+    public JTree getCurrentTreeNode() {
+    	return this.tree;
+    }
+    
     class MyTreeModelListener implements TreeModelListener {
         public void treeNodesChanged(TreeModelEvent e) {
             DefaultMutableTreeNode node;

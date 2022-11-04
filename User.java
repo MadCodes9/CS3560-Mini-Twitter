@@ -17,7 +17,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 //Uses composite pattern//leaf class
 
-public class User extends DefaultMutableTreeNode implements TwitterUsers, Observer{
+public class User extends DefaultMutableTreeNode implements Observer{
 	private String id;
 	private static int numOfUsers = 0;
 	private HashMap<String, String> following;
@@ -35,11 +35,10 @@ public class User extends DefaultMutableTreeNode implements TwitterUsers, Observ
 	}
 	
 	/*
-	 * Return the total number 
-	 * return integer
+	 * Return the total number of users
+	 * @return integer
 	*/
-	@Override
-	public void totalNum() {
+	public void totalNumOfUsers() {
 		System.out.println(String.valueOf(getTotalNum()));
 	}
 	

@@ -9,7 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 //group called Root to include everything.
 
 //Uses composite pattern//leaf class
-public class UserGroup extends DefaultMutableTreeNode implements TwitterUsers{
+public class UserGroup extends DefaultMutableTreeNode {
 	private String id;
 	private static int numOfUserGroups = 0;
 	private List<User> userGroup;
@@ -29,7 +29,11 @@ public class UserGroup extends DefaultMutableTreeNode implements TwitterUsers{
 		this.id = id;
 	}
 	
-	public int getTotalNum() {
+	/*
+	 * Return the total number of user groups  
+	 * @return integer
+	*/
+	public int getTotalNumOfUserGroups() {
 		return numOfUserGroups;
 	}
 	
@@ -39,12 +43,5 @@ public class UserGroup extends DefaultMutableTreeNode implements TwitterUsers{
 	 */
 	public void add(User user) {
 		userGroup.add(user);
-	}
-
-
-	@Override
-	public void totalNum() {
-		System.out.println(String.valueOf(getTotalNum()));
-	}
-	
+	}	
 }
