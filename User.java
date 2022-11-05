@@ -17,7 +17,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 //Uses composite pattern//leaf class
 
-public class User extends DefaultMutableTreeNode implements Observer{
+public class User extends SystemEntry implements Observer{
 	private String id;
 	private static int numOfUsers = 0;
 	private HashMap<String, String> following;
@@ -77,6 +77,8 @@ public class User extends DefaultMutableTreeNode implements Observer{
 		return numOfUsers;
 	}
 	
+	
+	//From composite class 
 	@Override
 	public void update(String message) {
 		if(message == null) {
@@ -85,6 +87,19 @@ public class User extends DefaultMutableTreeNode implements Observer{
 		else {
 			System.out.println(getId() + ":" + message);
 		}
+	}
+
+	@Override
+	protected void printThisBefore() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void printThisAfter() {
+		// TODO Auto-generated method stub
+		System.out.println(".");
+		
 	}
 
 }

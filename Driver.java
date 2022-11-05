@@ -22,10 +22,16 @@ public class Driver {
 //		p.postMessage("Hello there");
 //		p.notifyObservers();   //s1 and s2 will receive the update
 		
-		Admin admin = new Admin();
-		User user = new User("John");
-		admin.addUser(user);
+//		Admin admin = new Admin();
+//		User user = new User("John");
+//		admin.addUser(user);
 		
+		//Create and display GUI 
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+          public void run() {
+        	  TreeView.createAndShowGUI();   
+          }
+      });
 	
 	}
 

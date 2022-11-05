@@ -9,7 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 //group called Root to include everything.
 
 //Uses composite pattern//leaf class
-public class UserGroup extends DefaultMutableTreeNode {
+public class UserGroup extends SystemEntry {
 	private String id;
 	private static int numOfUserGroups = 0;
 	private List<User> userGroup;
@@ -43,5 +43,19 @@ public class UserGroup extends DefaultMutableTreeNode {
 	 */
 	public void add(User user) {
 		userGroup.add(user);
+	}
+
+	//From composite class
+	@Override
+	protected void printThisBefore() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void printThisAfter() {
+		// TODO Auto-generated method stub
+				System.out.println(".");
+		
 	}	
 }

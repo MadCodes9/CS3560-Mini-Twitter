@@ -44,6 +44,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
@@ -65,7 +66,7 @@ public class TreeView extends JPanel implements ActionListener {
     private static String CLEAR_COMMAND = "clear";
 
     private DynamicTree treePanel;
-    private Admin adminInstance;
+    //private Admin adminInstance;
     
     private JButton addUserButton;
     private JTextField addUserTextField;
@@ -78,6 +79,8 @@ public class TreeView extends JPanel implements ActionListener {
     private JButton groupTotalButton;
     private JButton messageTotalButton;
     private JButton percentageButton;
+    
+    private String createdUsers;
 
  
     public TreeView() {
@@ -86,9 +89,7 @@ public class TreeView extends JPanel implements ActionListener {
         //Create the components.
         treePanel = new DynamicTree();        
         populateTree(treePanel);
-       
-        
- 
+    
 //        JButton addButton = new JButton("Add");
 //        addButton.setActionCommand(ADD_COMMAND);
 //        addButton.addActionListener(this);
@@ -198,6 +199,11 @@ public class TreeView extends JPanel implements ActionListener {
 //    	treePanel.addObject(userGroup2, user4);
     	
     }
+    
+    public String getUser() {
+    	return this.createdUsers;
+    }
+    
      
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -214,7 +220,10 @@ public class TreeView extends JPanel implements ActionListener {
         }
         else if(e.getSource() == addUserButton) {
         	treePanel.addObject(addUserTextField.getText());
-        	System.out.println("Added " + addUserTextField.getText() + " user");
+        	
+        	//Pass user text-field text to admin, so admin can create a new user 
+        	this.createdUsers = addUserTextField.getText();
+        	System.out.println("User button");
         	
         }
         else if(e.getSource() == addGroupButton) {
@@ -253,7 +262,7 @@ public class TreeView extends JPanel implements ActionListener {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowGUI() {
+    public static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("DynamicTreeDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -268,14 +277,13 @@ public class TreeView extends JPanel implements ActionListener {
         frame.setVisible(true);
     }
  
-    public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-                
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        //Schedule a job for the event-dispatching thread:
+//        //creating and showing this application's GUI.
+//        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                createAndShowGUI();   
+//            }
+//        });
+//    }
 }
