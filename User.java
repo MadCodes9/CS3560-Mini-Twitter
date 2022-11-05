@@ -38,8 +38,8 @@ public class User extends SystemEntry implements Observer{
 	 * Return the total number of users
 	 * @return integer
 	*/
-	public void totalNumOfUsers() {
-		System.out.println(String.valueOf(getTotalNum()));
+	public int totalNumOfUsers() {
+		return getTotalNum();
 	}
 	
 	/*

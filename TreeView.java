@@ -80,12 +80,12 @@ public class TreeView extends JPanel implements ActionListener {
     private JButton messageTotalButton;
     private JButton percentageButton;
     
-    private String createdUsers;
-
+    private String createdUser;
  
     public TreeView() {
         super(new BorderLayout());
          
+//        adminInstance = new Admin();
         //Create the components.
         treePanel = new DynamicTree();        
         populateTree(treePanel);
@@ -199,12 +199,7 @@ public class TreeView extends JPanel implements ActionListener {
 //    	treePanel.addObject(userGroup2, user4);
     	
     }
-    
-    public String getUser() {
-    	return this.createdUsers;
-    }
-    
-     
+        
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         
@@ -220,10 +215,12 @@ public class TreeView extends JPanel implements ActionListener {
         }
         else if(e.getSource() == addUserButton) {
         	treePanel.addObject(addUserTextField.getText());
-        	
         	//Pass user text-field text to admin, so admin can create a new user 
-        	this.createdUsers = addUserTextField.getText();
+        
+        	Admin a = new Admin(addUserTextField.getText());
+        	a.addUser();
         	System.out.println("User button");
+        	
         	
         }
         else if(e.getSource() == addGroupButton) {

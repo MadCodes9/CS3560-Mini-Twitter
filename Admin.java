@@ -12,9 +12,10 @@ public class Admin extends TreeView {
 	
 	//Singleton pattern for instance
 	private TreeView treeViewInstance;
+	private String textField;
 	
-    public Admin() {
-    	treeViewInstance = new TreeView();
+    public Admin(String textField) {
+    	this.textField = textField;
     }
         
 //    private void addUser() {
@@ -36,13 +37,13 @@ public class Admin extends TreeView {
     
     public void addUser() {
 		List<User> user = new ArrayList<User>();
-		//add user 
-		user.add(new User(treeViewInstance.getUser()));
+		user.add(new User(this.textField));
 		
 		for (User w : user) {
-			System.out.println(w);
+			System.out.println("Total Users: " +String.valueOf(w.totalNumOfUsers()));;
+			System.out.println(user);
 		}
-		System.out.println("Added " + user.toString() + " user");
+		System.out.println("Added " + this.textField + " user");
 	}
     
 //    SystemEntry addUserGroup() {
