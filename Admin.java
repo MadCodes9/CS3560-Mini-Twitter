@@ -8,42 +8,49 @@ import java.util.List;
 //Tweet messages in all the users’ news feed (the message containing positive words,
 //such as good, great, excellent, etc.) Free free to decide the positive words.
 
-public class Admin extends TreeView {
+/**
+ * 
+ * With Composite we can treat tree hierarchies of objects with uniform
+ * interface (LetterComposite). In this example we have sentences composed of
+ * words composed of letters.
+ * 
+ */
+public class Admin extends TreeView implements SystemEntry{
 	
 	//Singleton pattern for instance
 	private TreeView treeViewInstance;
-	private String textField;
+	private List<SystemEntry> user;
+	private List<SystemEntry> userGroup;
 	
-    public Admin(String textField) {
-    	this.textField = textField;
+    public Admin() {
+    	treeViewInstance = new TreeView();
+    	user = new ArrayList<SystemEntry>();
+    	userGroup = new ArrayList<SystemEntry>();
     }
         
-//    private void addUser() {
-//    	if(treeViewInstance.getUser() != null) {
-//    		User user = new User(treeViewInstance.getUser());
-//    		
-//    		
-//    	}
-//    	else {
-//    		System.out.println("No user to add");
-//    	}
-//    	
-//    }
-//    
-    
-    private void addUserGroup(UserGroup userGroup) {
-
-    }
-    
     public void addUser() {
-		List<User> user = new ArrayList<User>();
-		user.add(new User(this.textField));
+		user.add(new User(treeViewInstance.getUser()));
+		printTotalUsers();
 		
-		for (User w : user) {
-			System.out.println("Total Users: " +String.valueOf(w.totalNumOfUsers()));;
-			System.out.println(user);
-		}
-		System.out.println("Added " + this.textField + " user");
+		System.out.println("Added " + treeViewInstance.getUser() + " user");
+	}
+    
+    public void addUserGroup() {
+    	userGroup.add(new UserGroup(treeViewInstance.getUserGroup()));
+    	printTotalUserGroups();
+    	
+    	System.out.println("Added " + treeViewInstance.getUserGroup() + " user group");
+    }
+
+    //Composite methods
+	@Override
+	public void printTotalUsers() {
+		user.forEach(SystemEntry::printTotalUsers);
+	}
+	@Override
+	public void printTotalUserGroups(){
+		userGroup.forEach(SystemEntry::printTotalUserGroups);
+		
 	}
     
 //    SystemEntry addUserGroup() {

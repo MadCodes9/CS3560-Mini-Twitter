@@ -85,7 +85,7 @@ public class TreeView extends JPanel implements ActionListener {
     public TreeView() {
         super(new BorderLayout());
          
-//        adminInstance = new Admin();
+       
         //Create the components.
         treePanel = new DynamicTree();        
         populateTree(treePanel);
@@ -199,6 +199,23 @@ public class TreeView extends JPanel implements ActionListener {
 //    	treePanel.addObject(userGroup2, user4);
     	
     }
+    
+    /*
+     * Get the user text field 
+     * @return String 
+     */
+    public String getUser() {
+    	return addUserTextField.getText();
+    }
+    
+    
+    /*
+     * Get the user group text field 
+     * @return String 
+     */
+   public String getUserGroup() {
+	   return addGroupTextField.getText();
+   }
         
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -216,9 +233,8 @@ public class TreeView extends JPanel implements ActionListener {
         else if(e.getSource() == addUserButton) {
         	treePanel.addObject(addUserTextField.getText());
         	//Pass user text-field text to admin, so admin can create a new user 
-        
-        	Admin a = new Admin(addUserTextField.getText());
-        	a.addUser();
+        	new Admin().addUser();
+        	
         	System.out.println("User button");
         	
         	
@@ -233,7 +249,10 @@ public class TreeView extends JPanel implements ActionListener {
         	 
         	//Add group to current parent node
         	treePanel.addObject(parentNode, addGroupTextField.getText());
-        	System.out.println("Added " + addGroupTextField.getText() + " user group");
+        	//Pass user text-field text to admin, so admin can create a new user 
+        	new Admin().addUserGroup();
+        	
+        	System.out.println("User group button");
         }
         else if(e.getSource() == userViewButton) {
         	System.out.println("User view button");

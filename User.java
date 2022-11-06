@@ -17,7 +17,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 //Uses composite pattern//leaf class
 
-public class User extends SystemEntry implements Observer{
+public class User implements SystemEntry, Observer{
 	private String id;
 	private static int numOfUsers = 0;
 	private HashMap<String, String> following;
@@ -32,14 +32,6 @@ public class User extends SystemEntry implements Observer{
 		
 		this.twitterNewsFeed = new TwitterNewsFeed();
 		numOfUsers++;
-	}
-	
-	/*
-	 * Return the total number of users
-	 * @return integer
-	*/
-	public int totalNumOfUsers() {
-		return getTotalNum();
 	}
 	
 	/*
@@ -72,13 +64,15 @@ public class User extends SystemEntry implements Observer{
 		following.put(getId(), id);
 	}
 	
-	
-	public int getTotalNum() {
+	/*
+	 * Return the total number of users
+	 * @return integer
+	*/
+	public int getTotalNumOfUsers() {
 		return numOfUsers;
 	}
 	
-	
-	//From composite class 
+
 	@Override
 	public void update(String message) {
 		if(message == null) {
@@ -89,17 +83,18 @@ public class User extends SystemEntry implements Observer{
 		}
 	}
 
+	//From composite class
 	@Override
-	protected void printThisBefore() {
-		// TODO Auto-generated method stub
-		
+	public void printTotalUsers() {
+		System.out.println("Total number of users: " + String.valueOf(getTotalNumOfUsers()));
 	}
 
 	@Override
-	protected void printThisAfter() {
-		// TODO Auto-generated method stub
-		System.out.println(".");
+	public void printTotalUserGroups() {
+		// Do nothing
 		
 	}
+
+
 
 }
