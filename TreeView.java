@@ -50,7 +50,7 @@ public class TreeView extends JPanel implements ActionListener {
          
         //Create the components.
         treePanel = new DynamicTree();        
-        populateTree(treePanel);
+//        populateTree(treePanel);
           
 //        JButton addButton = new JButton("Add");
 //        addButton.setActionCommand(ADD_COMMAND);
@@ -221,8 +221,12 @@ public class TreeView extends JPanel implements ActionListener {
         	System.out.println("User group button");
         }
         else if(e.getSource() == userViewButton) {
-        	
-        	
+        	   TreePath parentPath = treePanel.getCurrentTreeNode().getSelectionPath();
+          	 
+          	 
+        	//Open up user view window when pressed and pass currently selected user
+        	UserView userViewWindow = new UserView(parentPath.getPathComponent(1).toString());
+        
         	System.out.println("User view button");
         }
         else if(e.getSource() == userTotalButton) {
@@ -246,9 +250,7 @@ public class TreeView extends JPanel implements ActionListener {
         }
         else if(e.getSource() == percentageButton) {
         	System.out.println("Positive percentage button");
-        }
-        
-        
+        } 
     }
  
     /**
