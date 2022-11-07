@@ -1,42 +1,3 @@
-
-/*
- * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   - Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *
- *   - Neither the name of Oracle or the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
- 
-
- 
-/*
- * This code is based on an example provided by Richard Stanford, 
- * a tutorial reader.
- */
- 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -51,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -59,6 +21,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
  
+//Implements singleton pattern
 public class TreeView extends JPanel implements ActionListener {
     private int newNodeSuffix = 1;
 //    private static String ADD_COMMAND = "add";
@@ -80,16 +43,15 @@ public class TreeView extends JPanel implements ActionListener {
     private JButton messageTotalButton;
     private JButton percentageButton;
     
-    private String createdUser;
- 
+    private Admin adminInstance;
+    
     public TreeView() {
         super(new BorderLayout());
          
-       
         //Create the components.
         treePanel = new DynamicTree();        
         populateTree(treePanel);
-    
+          
 //        JButton addButton = new JButton("Add");
 //        addButton.setActionCommand(ADD_COMMAND);
 //        addButton.addActionListener(this);
@@ -173,6 +135,9 @@ public class TreeView extends JPanel implements ActionListener {
         add(panel2, BorderLayout.EAST);
     }
     
+  
+    
+    
     public void populateTree(DynamicTree treePanel) {        
 //    	DefaultMutableTreeNode root = null;
 //    	User user0 = new User("stu0");
@@ -200,14 +165,6 @@ public class TreeView extends JPanel implements ActionListener {
     	
     }
     
-    /*
-     * Get the user text field 
-     * @return String 
-     */
-    public String getUser() {
-    	return addUserTextField.getText();
-    }
-    
     
     /*
      * Get the user group text field 
@@ -232,8 +189,13 @@ public class TreeView extends JPanel implements ActionListener {
         }
         else if(e.getSource() == addUserButton) {
         	treePanel.addObject(addUserTextField.getText());
-        	//Pass user text-field text to admin, so admin can create a new user 
-        	new Admin().addUser();
+        	
+        	 //Get singleton instance from TreeView
+        	this.adminInstance = Admin.getInstance();
+        	
+         	//Pass user text-field text to admin, so admin can create a new user 
+        	this.adminInstance.addUser(addUserTextField.getText());
+        	//new Admin().addUser(addUserTextField.getText());
         	
         	System.out.println("User button");
         	
@@ -249,18 +211,34 @@ public class TreeView extends JPanel implements ActionListener {
         	 
         	//Add group to current parent node
         	treePanel.addObject(parentNode, addGroupTextField.getText());
-        	//Pass user text-field text to admin, so admin can create a new user 
-        	new Admin().addUserGroup();
+        	
+       	 	//Get singleton instance from Admin
+        	this.adminInstance = Admin.getInstance();
+        	
+         	//Pass user text-field text to admin, so admin can create a new user group
+        	this.adminInstance.addUserGroup(addGroupTextField.getText());
         	
         	System.out.println("User group button");
         }
         else if(e.getSource() == userViewButton) {
+        	
+        	
         	System.out.println("User view button");
         }
         else if(e.getSource() == userTotalButton) {
+        	//Get singleton instance from Admin
+        	this.adminInstance = Admin.getInstance();
+        	
+        	//Pop-up message
+        	JOptionPane.showMessageDialog(null, this.adminInstance.getTotalUsers(),"User Total", JOptionPane.PLAIN_MESSAGE);
         	System.out.println("User total button");
         }
         else if(e.getSource() == groupTotalButton) {
+        	//Get singleton instance from Admin
+        	this.adminInstance = Admin.getInstance();
+        	
+        	//Pop-up message
+        	JOptionPane.showMessageDialog(null, this.adminInstance.getTotalUserGroups(),"User Group Total", JOptionPane.PLAIN_MESSAGE);
         	System.out.println("Group total button");
         }
         else if(e.getSource() == messageTotalButton) {
@@ -280,7 +258,7 @@ public class TreeView extends JPanel implements ActionListener {
      */
     public static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("DynamicTreeDemo");
+        JFrame frame = new JFrame("Admin Control Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  
         //Create and set up the content pane.
@@ -292,14 +270,4 @@ public class TreeView extends JPanel implements ActionListener {
         frame.pack();
         frame.setVisible(true);
     }
- 
-//    public static void main(String[] args) {
-//        //Schedule a job for the event-dispatching thread:
-//        //creating and showing this application's GUI.
-//        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                createAndShowGUI();   
-//            }
-//        });
-//    }
 }

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -20,8 +21,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class User implements SystemEntry, Observer{
 	private String id;
 	private static int numOfUsers = 0;
+	private static int numOfMessages = 0;
 	private HashMap<String, String> following;
 	private List<User> followers;
+	
+	
 	TwitterNewsFeed twitterNewsFeed;
 
 	public User(String id){
@@ -31,6 +35,7 @@ public class User implements SystemEntry, Observer{
 		this.followers = new ArrayList<User>();
 		
 		this.twitterNewsFeed = new TwitterNewsFeed();
+		
 		numOfUsers++;
 	}
 	
@@ -60,39 +65,53 @@ public class User implements SystemEntry, Observer{
 	/*
 	 * Current user follows another user
 	*/
-	public void follow(String id) {
-		following.put(getId(), id);
+	public void follow(Observer obs) {
+		//following.put(getId(), id);
+		twitterNewsFeed.attach(obs);
+		System.out.println(getId() + " now following " + obs.toString());
 	}
-	
-	/*
-	 * Return the total number of users
-	 * @return integer
-	*/
-	public int getTotalNumOfUsers() {
-		return numOfUsers;
-	}
-	
 
+	public void postMessage(String message) {
+		System.out.println(getId() + " posted on topic: " + message);			
+	    twitterNewsFeed.notifyObservers(message);  
+	}
+	
 	@Override
-	public void update(String message) {
+	public void update(String obs, String message) {
 		if(message == null) {
 			System.out.println("No message");
 		}
 		else {
-			System.out.println(getId() + ":" + message);
+			System.out.println("Message to " + obs + ":" + message);
 		}
+			
+			
 	}
+	
 
+	/*
+	 * Return the total number of messages
+	 * @return integer
+	*/
+	public int getTotalMessages() {
+		return numOfMessages;
+	}
+	
 	//From composite class
+	/*
+	 * Return the total number of users
+	 * @return integer
+	*/
 	@Override
-	public void printTotalUsers() {
-		System.out.println("Total number of users: " + String.valueOf(getTotalNumOfUsers()));
+	public int getTotalUsers() {
+//		 String.valueOf(getTotalNumOfUsers());
+		return numOfUsers;
 	}
 
 	@Override
-	public void printTotalUserGroups() {
+	public int getTotalUserGroups() {
 		// Do nothing
-		
+		return 0;
 	}
 
 

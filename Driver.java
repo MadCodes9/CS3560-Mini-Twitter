@@ -2,38 +2,28 @@
 public class Driver {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-//		User user = new User("123456");
-//		User user2 = new User("132326");
-//		UserGroup userGroup = new UserGroup("90909");
-//		Admin admin = new Admin();
-//		
-//		admin.addUser(user);
-//		admin.addUser(user2);
-//		admin.addUserGroup(userGroup);
-//	
-//		
-//		User s1 = new User("123456"); 
-//		User s2 = new User("909012"); 
-//		TwitterNewsFeed p = new TwitterNewsFeed();
-//		
-//		p.attach(s1);
-//		p.attach(s2);
-//		p.postMessage("Hello there");
-//		p.notifyObservers();   //s1 and s2 will receive the update
+	
+		User s1 = new User("John"); 
+		User s2 = new User("Bob"); 
+		User s3 = new User("Matt");
+		s1.follow(s2);
+		s2.follow(s1);
+		s1.follow(s3);
+		System.out.println();
 		
-//		Admin admin = new Admin();
-//		User user = new User("John");
-//		admin.addUser(user);
+		s1.postMessage("John says hi");
+		System.out.println();
+		s2.postMessage("Bob responds hi back");
+	
 		
-		//Create and display GUI 
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-          public void run() {
-        	  TreeView.createAndShowGUI();   
-          }
-      });
-
-		
+//		//Create and display GUI 
+//		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//          public void run() {
+//        	  TreeView.createAndShowGUI();   
+//          }
+//      });
+//
+//		
 	
 	}
 

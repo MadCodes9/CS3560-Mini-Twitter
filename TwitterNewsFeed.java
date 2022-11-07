@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,23 +13,21 @@ public class TwitterNewsFeed implements Subject{
 	 * 
 	 */
 	private List<Observer> observers;
-	private List<String> users;
-	private List<String> messages;
+	private List<String> users;	
 	private String message;
+	HashMap<User, String> m;
 	
 	public TwitterNewsFeed() {
 		this.observers = new ArrayList<>();
 		this.users = new ArrayList<String>();
-		this.messages  = new ArrayList<String>();		
 	}
 	
-	public void postMessage(String message) {
-		  System.out.println("Message posted on topic: " + message);
-	      this.message = message;
-	      messages.add(message);
-	      notifyObservers();
-	}
 	
+	public void printNewsFeed() {
+		System.out.println("= News Feed =");
+		
+	}
+		
 	@Override
 	public void attach(Observer obs) {
 		observers.add(obs);
@@ -40,24 +39,20 @@ public class TwitterNewsFeed implements Subject{
 	}
 	
 	@Override
-	public String getMessage() {
-		return this.message;
-	}
-	
-	@Override
-	public void notifyObservers() {
-		System.out.println("Notified followers and yourself!");
-//		
-//		this.message = message;
+	public void notifyObservers(String message) {
+		System.out.println("Notified followers");
+		
 		if(!observers.isEmpty() && observers != null) {
 			for (Observer obs : observers) {
-				obs.update(getMessage());
+				obs.update(obs.toString(), message);
 			}
+			
 		}
 		else {
 			System.out.println("There are no post to notify");
 		}
 	}
+
 	
 	
 }

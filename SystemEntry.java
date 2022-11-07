@@ -4,6 +4,6 @@
  * 
  */
 public interface SystemEntry {
-	public abstract void printTotalUsers();
-	public abstract void printTotalUserGroups();
+	public abstract int getTotalUsers();
+	public abstract int getTotalUserGroups();
 }

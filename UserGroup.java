@@ -21,20 +21,16 @@ public class UserGroup implements SystemEntry {
 		numOfUserGroups ++;
 	}
 	
+	/*
+	 * Getter method for user group id 
+	 * return String
+	*/
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
-	}
-	
-	/*
-	 * Return the total number of user groups  
-	 * @return integer
-	*/
-	public int getTotalNumOfUserGroups() {
-		return numOfUserGroups;
 	}
 	
 	/*
@@ -47,13 +43,19 @@ public class UserGroup implements SystemEntry {
 
 	//From composite class
 	@Override
-	public void printTotalUsers() {
+	public int getTotalUsers() {
 		// Do nothing 
+		return 0;
 	}
 
+	/*
+	 * Return the total number of user groups  
+	 * @return integer
+	*/
 	@Override
-	public void printTotalUserGroups() {
-		System.out.println("Total number of users: " + String.valueOf(getTotalNumOfUserGroups()));	
+	public int getTotalUserGroups() {
+		//System.out.println("Total number of user groups: " + String.valueOf(getTotalNumOfUserGroups()));	
+		return numOfUserGroups;
 	}
 
 	

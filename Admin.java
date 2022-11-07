@@ -11,54 +11,58 @@ import java.util.List;
 /**
  * 
  * With Composite we can treat tree hierarchies of objects with uniform
- * interface (LetterComposite). In this example we have sentences composed of
- * words composed of letters.
+ * interface (SystemEntry).
  * 
  */
 public class Admin extends TreeView implements SystemEntry{
-	
-	//Singleton pattern for instance
-	private TreeView treeViewInstance;
 	private List<SystemEntry> user;
 	private List<SystemEntry> userGroup;
+	protected static Admin adminInstance;
 	
     public Admin() {
-    	treeViewInstance = new TreeView();
     	user = new ArrayList<SystemEntry>();
     	userGroup = new ArrayList<SystemEntry>();
     }
-        
-    public void addUser() {
-		user.add(new User(treeViewInstance.getUser()));
-		printTotalUsers();
-		
-		System.out.println("Added " + treeViewInstance.getUser() + " user");
+    
+    //singleton instance created
+    public static Admin getInstance() {
+		if (adminInstance == null) {
+			adminInstance = new Admin();
+		}
+		return adminInstance;
 	}
     
-    public void addUserGroup() {
-    	userGroup.add(new UserGroup(treeViewInstance.getUserGroup()));
-    	printTotalUserGroups();
-    	
-    	System.out.println("Added " + treeViewInstance.getUserGroup() + " user group");
+    /*
+     * Add a new user, obtaining the data from the text-field 
+     */
+    public void addUser(String user) {
+    	this.user.add(new User(user));
+		System.out.println("Total users: " + getTotalUsers());
+	 	System.out.println("Added " + user + " user");
+	}
+    
+    /*
+     * Add a new user group, obtaining the data from the text-field 
+     */
+    public void addUserGroup(String userGroup) {
+    	this.userGroup.add(new UserGroup(userGroup));
+    	getTotalUserGroups();
+    	System.out.println("Total user groups: " + getTotalUserGroups());
+    	System.out.println("Added " + userGroup + " user group");
     }
+    
 
     //Composite methods
 	@Override
-	public void printTotalUsers() {
-		user.forEach(SystemEntry::printTotalUsers);
+	public int getTotalUsers() {
+		return user.size();
+		//user.forEach(SystemEntry::printTotalUsers);
 	}
 	@Override
-	public void printTotalUserGroups(){
-		userGroup.forEach(SystemEntry::printTotalUserGroups);
+	public int getTotalUserGroups(){
+		return userGroup.size();
+		//userGroup.forEach(SystemEntry::printTotalUserGroups);
 		
 	}
-    
-//    SystemEntry addUserGroup() {
-//    	List<UserGroup> userGroup = new ArrayList<UserGroup>();
-//    	userGroup.add(new UserGroup())
-//    	
-//    }
-    
-
 
 }
