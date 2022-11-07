@@ -23,8 +23,11 @@ public class TwitterNewsFeed implements Subject{
 	}
 	
 	
-	public void printNewsFeed() {
+	public void displayNewsFeed(HashMap<String, List<String>> messages) {
 		System.out.println("= News Feed =");
+		messages.entrySet().forEach(entry -> {
+		    System.out.println(entry.getKey() + ": " + entry.getValue());
+		});
 		
 	}
 		
@@ -39,12 +42,12 @@ public class TwitterNewsFeed implements Subject{
 	}
 	
 	@Override
-	public void notifyObservers(String message) {
+	public void notifyObservers(String sender, String message) {
 		System.out.println("Notified followers");
 		
 		if(!observers.isEmpty() && observers != null) {
 			for (Observer obs : observers) {
-				obs.update(obs.toString(), message);
+				obs.update(sender, obs.toString(), message);
 			}
 			
 		}

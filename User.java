@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -22,18 +23,22 @@ public class User implements SystemEntry, Observer{
 	private String id;
 	private static int numOfUsers = 0;
 	private static int numOfMessages = 0;
-	private HashMap<String, String> following;
-	private List<User> followers;
-	
+	//private HashMap<String, String> following;
+	private HashMap<String, List<String>> followers;
+	private HashMap<String, List<String>> messages;
+	private List<String> follower;
+	private List<String> message;
 	
 	TwitterNewsFeed twitterNewsFeed;
 
 	public User(String id){
 		super();
 		this.id = id;
-		this.following = new HashMap<String, String>();
-		this.followers = new ArrayList<User>();
-		
+		//this.following = new HashMap<String, String>();
+		this.followers = new HashMap<String, List<String>>();
+		this.messages = new HashMap<String, List<String>>();
+		this.follower = new ArrayList<String>();
+		this.message = new ArrayList<String>();
 		this.twitterNewsFeed = new TwitterNewsFeed();
 		
 		numOfUsers++;
@@ -63,26 +68,64 @@ public class User implements SystemEntry, Observer{
 	}
 	
 	/*
-	 * Current user follows another user
+	 * Current user follows another user and store in hash map 
+	 * @param Observer the user to follow
 	*/
-	public void follow(Observer obs) {
-		//following.put(getId(), id);
-		twitterNewsFeed.attach(obs);
-		System.out.println(getId() + " now following " + obs.toString());
+	public void follow(Observer user) {
+		follower.add(user.toString());
+		 Arrays.asList(follower);
+		 
+		//Add followers to current user
+		followers.put(getId(), follower);
+		
+		twitterNewsFeed.attach(user);
+		System.out.println(getId() + " now following " + user.toString());
+	}
+	
+	public void displayFollowers() {
+		followers.entrySet().forEach(entry -> {
+		    System.out.println(entry.getKey() + " is following " + entry.getValue());
+		});
 	}
 
+	/*
+	 * Post a message on News Feed and notify all followers of posted message
+	 * @param String a message to be posted 
+	 */
 	public void postMessage(String message) {
+		String post;
+		
+		//Current user should be able to see their own post in News Feed
+		post = getId() + ": " + message;
+		this.message.add(post);
+		Arrays.asList(this.message);
+		
+		//Add messages to current user 
+		messages.put(getId(), this.message);
+		
 		System.out.println(getId() + " posted on topic: " + message);			
-	    twitterNewsFeed.notifyObservers(message);  
+	    twitterNewsFeed.notifyObservers(getId(), message);  
+	    
+	    twitterNewsFeed.displayNewsFeed(messages);
 	}
 	
 	@Override
-	public void update(String obs, String message) {
+	public void update(String sender, String obs, String message) {
+		String post;
+
 		if(message == null) {
 			System.out.println("No message");
 		}
 		else {
-			System.out.println("Message to " + obs + ":" + message);
+			post = sender + ": " + message;
+			this.message.add(post);
+			Arrays.asList(this.message);
+			
+			//Add messages to current user 
+			messages.put(obs, this.message);
+			
+			System.out.println("Message to " + obs + " from " + sender + ": " + message);
+			
 		}
 			
 			
