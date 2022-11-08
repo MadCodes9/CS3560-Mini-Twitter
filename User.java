@@ -28,6 +28,7 @@ public class User implements SystemEntry, Observer{
 	private HashMap<String, List<String>> messages;
 	private List<String> follower;
 	private List<String> message;
+	List<String> listOfFollowers;
 	
 	TwitterNewsFeed twitterNewsFeed;
 
@@ -40,6 +41,7 @@ public class User implements SystemEntry, Observer{
 		this.follower = new ArrayList<String>();
 		this.message = new ArrayList<String>();
 		this.twitterNewsFeed = new TwitterNewsFeed();
+		
 		
 		numOfUsers++;
 	}
@@ -82,10 +84,22 @@ public class User implements SystemEntry, Observer{
 		System.out.println(getId() + " now following " + user.toString());
 	}
 	
-	public void displayFollowers() {
-		followers.entrySet().forEach(entry -> {
-		    System.out.println(entry.getKey() + " is following " + entry.getValue());
-		});
+	public List<String> getFollowers() {
+		this.listOfFollowers = new ArrayList<String>();
+		
+		for (String key : followers.keySet()) {
+		    for (String r : followers.get(key)) {
+		    	listOfFollowers.add(r.toString());    
+		    }
+		    System.out.println(key + " is following " + listOfFollowers);
+		}
+//		
+//		followers.entrySet().forEach(entry -> {
+//			
+//			listOfFollowers.add(entry.getValue().toString());
+//		    System.out.println(entry.getKey() + " is following " + entry.getValue());
+//		});
+		 return listOfFollowers;	
 	}
 
 	/*

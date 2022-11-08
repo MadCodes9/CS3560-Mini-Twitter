@@ -17,6 +17,7 @@ import java.util.List;
 public class Admin extends TreeView implements SystemEntry{
 	private List<SystemEntry> user;
 	private List<SystemEntry> userGroup;
+	private User currentUser;
 	protected static Admin adminInstance;
 	
     public Admin() {
@@ -36,7 +37,8 @@ public class Admin extends TreeView implements SystemEntry{
      * Add a new user, obtaining the data from the text-field 
      */
     public void addUser(String user) {
-    	this.user.add(new User(user));
+    	this.currentUser = new User(user);
+    	this.user.add(this.currentUser);
 		System.out.println("Total users: " + getTotalUsers());
 	 	System.out.println("Added " + user + " user");
 	}
@@ -52,6 +54,10 @@ public class Admin extends TreeView implements SystemEntry{
     }
     
 
+    public List<SystemEntry> getUser() {
+    	return this.user;
+    }
+    
     //Composite methods
 	@Override
 	public int getTotalUsers() {

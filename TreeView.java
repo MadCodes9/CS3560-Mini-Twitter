@@ -221,12 +221,15 @@ public class TreeView extends JPanel implements ActionListener {
         	System.out.println("User group button");
         }
         else if(e.getSource() == userViewButton) {
-        	   TreePath parentPath = treePanel.getCurrentTreeNode().getSelectionPath();
-          	 
-          	 
-        	//Open up user view window when pressed and pass currently selected user
-        	UserView userViewWindow = new UserView(parentPath.getPathComponent(1).toString());
-        
+        	 TreePath parentPath = treePanel.getCurrentTreeNode().getSelectionPath();
+   
+        	 if(parentPath != null) {
+        		//Open up user view window when pressed and pass currently selected user
+              	UserView userViewWindow = new UserView(parentPath.getPathComponent(1).toString());
+        	 }
+        	 else {
+        		 System.out.println("No user selected");
+        	 } 
         	System.out.println("User view button");
         }
         else if(e.getSource() == userTotalButton) {
