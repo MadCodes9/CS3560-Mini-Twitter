@@ -2,47 +2,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
-//2. A user has 1) an unique ID; 2) a list of user IDs that are following this user (followers); 3)
-//a list of user IDs being followed by this user (followings); 4) a news feed list containing a
-//list of Twitter messages.
-
-//4. Users can choose to follow other users (not user groups) by providing the target user ID.
-//Unfollow is not required.
-//
-//5. Users can also post a short Tweet message (a String), so that all the followers can see
-//this message in their news feed lists. Of course, the user can also see his or her own
-//posted messages.
-
-//Uses composite pattern//leaf class
-
-public class User implements SystemEntry, Observer{
+//Leaf class of composite pattern
+public class User implements SystemEntry, Observer, Visitable{
 	private String id;
 	private static int numOfUsers = 0;
 	private static int numOfMessages = 0;
-	//private HashMap<String, String> following;
 	private HashMap<String, List<String>> followers;
 	private HashMap<String, List<String>> messages;
 	private List<String> follower;
 	private List<String> message;
-	List<String> listOfFollowers;
-	List<String> listOfMessages;
-	
-	TwitterNewsFeed twitterNewsFeed;
+	private List<String> listOfFollowers;
+	private List<String> listOfMessages;
+	private TwitterNewsFeed twitterNewsFeed;
 
 	public User(String id){
 		super();
 		this.id = id;
-		//this.following = new HashMap<String, String>();
 		this.followers = new HashMap<String, List<String>>();
 		this.messages = new HashMap<String, List<String>>();
 		this.follower = new ArrayList<String>();
 		this.message = new ArrayList<String>();
 		this.twitterNewsFeed = new TwitterNewsFeed();
-		
 		
 		numOfUsers++;
 	}
@@ -85,6 +66,10 @@ public class User implements SystemEntry, Observer{
 		System.out.println(getId() + " now following " + user.toString());
 	}
 	
+	/*
+	 * Get the all the followers of the current user 
+	 * @return List<String> the list of followers 
+	 */
 	public List<String> getFollowers() {
 		this.listOfFollowers = new ArrayList<String>();
 		
@@ -92,17 +77,14 @@ public class User implements SystemEntry, Observer{
 		    for (String r : followers.get(key)) {
 		    	listOfFollowers.add(r.toString());    
 		    }
-//		    System.out.println(key + " is following " + listOfFollowers);
 		}
-//		
-//		followers.entrySet().forEach(entry -> {
-//			
-//			listOfFollowers.add(entry.getValue().toString());
-//		    System.out.println(entry.getKey() + " is following " + entry.getValue());
-//		});
 		 return listOfFollowers;	
 	}
 	
+	/*
+	 * Get the all the messages of the current user 
+	 * @return List<String> the list of messages 
+	 */
 	public List<String> getMessages(){
 		this.listOfMessages = new ArrayList<String>();
 		
@@ -110,7 +92,6 @@ public class User implements SystemEntry, Observer{
 		    for (String r : messages.get(key)) {
 		    	listOfMessages.add(r.toString());    
 		    }
-//		    System.out.println(key + " is following " + listOfFollowers);
 		}
 		return listOfMessages;
 	}
@@ -137,6 +118,10 @@ public class User implements SystemEntry, Observer{
 	    twitterNewsFeed.displayNewsFeed(messages);
 	}
 	
+	/*
+	 * Update the current user's follower's messages
+	 * @param String the current user, String the follower to be updates, String the message to be updated
+	 */
 	@Override
 	public void update(String sender, String obs, String message) {
 		String post;
@@ -156,9 +141,7 @@ public class User implements SystemEntry, Observer{
 			
 			System.out.println("Message to " + obs + " from " + sender + ": " + message);
 			
-		}
-			
-			
+		}		
 	}
 	
 
@@ -169,15 +152,14 @@ public class User implements SystemEntry, Observer{
 	public int getTotalMessages() {
 		return numOfMessages;
 	}
-	
-	//From composite class
+		
 	/*
 	 * Return the total number of users
+	 * From composite class
 	 * @return integer
 	*/
 	@Override
 	public int getTotalUsers() {
-//		 String.valueOf(getTotalNumOfUsers());
 		return numOfUsers;
 	}
 
@@ -187,6 +169,12 @@ public class User implements SystemEntry, Observer{
 		return 0;
 	}
 
-
-
+	/*
+	 * Implementation from Visitor interface 
+	 * @param UserTypeVisitor the visitor type User 
+	 */
+	@Override
+	public void accept(UserTypeVisitor visitor) {
+		visitor.visit(this);
+	}
 }

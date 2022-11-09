@@ -54,9 +54,6 @@ public class UserView extends JPanel implements ActionListener{
 		this.userViewList = new ArrayList<UserView>();
 		this.currUser = selectedUser;
 		
-//		this.followers = new ArrayList<String>();
-		
-		
 		//Lay everything out.
 		frame = new JFrame(this.currUser);
 		
@@ -164,18 +161,6 @@ public class UserView extends JPanel implements ActionListener{
 		if(e.getSource() == followUserButton) {
 			scrollPanel.removeAll(); //remove to update
 			
-//			this.adminInstance = Admin.getInstance();
-//			this.allUsers = this.adminInstance.getUser();
-			
-			
-//			//Cast current user 
-//			 for(SystemEntry user : allUsers) {				 
-//				 if(this.currUser.equals(user.toString())) {
-//					 this.user = (User) user;	//cast to User 
-//					 System.out.println("User is: " + user.toString());
-//				 }
-//			 }
-			 
 			//Get what is in entered in text field and make sure whoever the user wants to follow exists
 			 for(SystemEntry user : allUsers) {				
 				 //User to follow must exist and current user can't follow them self 
@@ -219,13 +204,9 @@ public class UserView extends JPanel implements ActionListener{
 			panel2.revalidate();
 			panel2.repaint();
 			
-
-			System.out.println("CURRENT USER: " + this.currUser);
 			for(UserView u: userViewList) {
-				System.out.println("VIEW LIST" + u.getCurrUser().toString());
 				if(this.currUser.equals(u.getCurrUser().toString())) {
-					System.out.println("THIS USER POSTED" + u.getCurrUser().toString());
-					
+					//do nothing
 				}
 				else {
 					this.followers = this.getCurrUser().getFollowers();
@@ -236,7 +217,6 @@ public class UserView extends JPanel implements ActionListener{
 						if(u.getCurrUser().toString().equals(this.followers.get(i))) {
 							u.refresh();
 						}
-					
 					}
 				}
 			}
@@ -245,9 +225,5 @@ public class UserView extends JPanel implements ActionListener{
 		else if (e.getSource() == refreshButton) {
 			refresh();
 		}
-
-		
 	}
-	
-	
 }

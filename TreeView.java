@@ -22,15 +22,13 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
  
-//Implements singleton pattern
-public class TreeView extends JPanel implements ActionListener {
-    private int newNodeSuffix = 1;
-//    private static String ADD_COMMAND = "add";
-    private static String REMOVE_COMMAND = "remove";
-    private static String CLEAR_COMMAND = "clear";
 
+/*
+ * Implements singleton pattern
+ * This class also drives the visitor class Admin
+ */
+public class TreeView extends JPanel implements ActionListener {
     private DynamicTree treePanel;
-    //private Admin adminInstance;
     
     private JButton addUserButton;
     private JTextField addUserTextField;
@@ -49,28 +47,20 @@ public class TreeView extends JPanel implements ActionListener {
     private List<UserView> userViewList;
     
     
+    //normal shopping cart stuff
+    private ArrayList<Visitable> items;
+    
     public TreeView() {
         super(new BorderLayout());
         
         this.userViewList = new ArrayList<UserView>();
         
+        this.items = new ArrayList<Visitable>();
+        
+        
         //Create the components.
         treePanel = new DynamicTree();        
-//        populateTree(treePanel);
-          
-//        JButton addButton = new JButton("Add");
-//        addButton.setActionCommand(ADD_COMMAND);
-//        addButton.addActionListener(this);
-       
-        JButton removeButton = new JButton("Remove");
-        removeButton.setActionCommand(REMOVE_COMMAND);
-        removeButton.addActionListener(this);
          
-        JButton clearButton = new JButton("Clear");
-        clearButton.setActionCommand(CLEAR_COMMAND);
-        clearButton.addActionListener(this);
-        
-        
         //User Button 
         addUserButton = new JButton("Add User");
         addUserButton.setPreferredSize(new Dimension(100, 30));
@@ -125,9 +115,6 @@ public class TreeView extends JPanel implements ActionListener {
         JPanel panel2 = new JPanel();
         panel2.setPreferredSize(new Dimension(350,300));
         
-//        panel.add(addButton);
-        panel.add(removeButton); 
-        panel.add(clearButton);
         panel2.add(addUserButton);
         panel2.add(addUserTextField);
         panel2.add(addGroupButton);
@@ -141,35 +128,6 @@ public class TreeView extends JPanel implements ActionListener {
         add(panel2, BorderLayout.EAST);
     }
     
-
-    
-    public void populateTree(DynamicTree treePanel) {        
-//    	DefaultMutableTreeNode root = null;
-//    	User user0 = new User("stu0");
-//    	root = treePanel.addObject(null, user0);
-//    	
-//        DefaultMutableTreeNode userGroup = null;
-//    	DefaultMutableTreeNode user = null;
-//    	DefaultMutableTreeNode userGroup2 = null;
-//    	
-//    	
-//    	User user1 = new User("John");
-//    	User user2 = new User("Bob");
-//    	User user3 = new User("Steve");
-//    	User user4 = new User("stu3");
-//    	
-//    	//Added users to user group 
-//    	userGroup = treePanel.addObject(null, "CS356");
-//    	treePanel.addObject(userGroup, user1);
-//    	treePanel.addObject(userGroup, user2);
-//    	treePanel.addObject(userGroup, user3);
-//    	
-//    	//Nested user group folder
-//    	userGroup2 = treePanel.addObject(userGroup, "CS356Session01");
-//    	treePanel.addObject(userGroup2, user4);
-    	
-    }
-    
     
     /*
      * Get the user group text field 
@@ -179,20 +137,8 @@ public class TreeView extends JPanel implements ActionListener {
 	   return addGroupTextField.getText();
    }
     
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        
-//        if (ADD_COMMAND.equals(command)) {
-//            treePanel.addObject("Added");
-//        } 
-        if (REMOVE_COMMAND.equals(command)) {
-            //Remove button clicked
-            treePanel.removeCurrentNode();
-        } else if (CLEAR_COMMAND.equals(command)) {
-            //Clear button clicked.
-            treePanel.clear();
-        }
-        else if(e.getSource() == addUserButton) {
+    public void actionPerformed(ActionEvent e) {    
+        if(e.getSource() == addUserButton) {
         	treePanel.addObject(addUserTextField.getText());
         	
         	 //Get singleton instance from TreeView
@@ -200,15 +146,12 @@ public class TreeView extends JPanel implements ActionListener {
         	
          	//Pass user text-field text to admin, so admin can create a new user 
         	this.adminInstance.addUser(addUserTextField.getText());
-        	//new Admin().addUser(addUserTextField.getText());
         	
-        	System.out.println("User button");
-        	
-        	
+        	System.out.println("User button");	
         }
         else if(e.getSource() == addGroupButton) {
-        	
         	DefaultMutableTreeNode parentNode = null;
+        	
         	//get current selected tree node 
             TreePath parentPath = treePanel.getCurrentTreeNode().getSelectionPath();
         	 parentNode = (DefaultMutableTreeNode)
@@ -266,6 +209,21 @@ public class TreeView extends JPanel implements ActionListener {
         	System.out.println("Message total button");
         }
         else if(e.getSource() == percentageButton) {
+        	//Get singleton instance from Admin
+        	this.adminInstance = Admin.getInstance();
+        	
+        	 
+        	 //iterate through all items
+            for(Visitable item: items) {
+              item.accept(this.adminInstance);
+              System.out.println("ITEM: " + item);
+            }
+            
+            float positivePercentage = this.adminInstance.getPositivePercentage();
+           
+            
+        	//Pop-up message
+        	JOptionPane.showMessageDialog(null, positivePercentage,"Positive Percentage(%)", JOptionPane.PLAIN_MESSAGE);
         	System.out.println("Positive percentage button");
         } 
     }
