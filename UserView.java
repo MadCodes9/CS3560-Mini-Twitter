@@ -34,7 +34,7 @@ public class UserView extends JPanel implements ActionListener{
     private JButton tweetMessageButton;
     private JTextField tweetMessageTextField;
     private JPanel panel;
-   
+    private JPanel panel2; 
     private List<SystemEntry> allUsers;
     private User user;
     private User followUser;
@@ -42,16 +42,29 @@ public class UserView extends JPanel implements ActionListener{
 	private String currUser;
 	
 	private List<String> followers;
+	private List<String> messages;
 	private JPanel scrollPanel = new JPanel();
+	private JPanel scrollPanel2 = new JPanel();
 	
+	private List<UserView> userViewList;
+	
+	private JButton refreshButton;
+	  
 	UserView(String selectedUser){
+		this.userViewList = new ArrayList<UserView>();
 		this.currUser = selectedUser;
+		
 //		this.followers = new ArrayList<String>();
 		
 		
 		//Lay everything out.
 		frame = new JFrame(this.currUser);
 		
+		//Refresh button
+		refreshButton = new JButton("Refresh");
+		refreshButton.setBounds(400, 260, 80, 30);
+		refreshButton.addActionListener(this);
+				
         //Follow user Text Field 
 		followUserTextField = new JTextField();
 		followUserTextField.setBounds(10,10,150,30);
@@ -74,6 +87,7 @@ public class UserView extends JPanel implements ActionListener{
 		tweetMessageTextField.setForeground(Color.gray);
 		tweetMessageTextField.setText("Tweet Message");
 		
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(new Dimension(500, 550));
 		frame.setLayout(null);
@@ -87,12 +101,13 @@ public class UserView extends JPanel implements ActionListener{
 		
 		
 		
-		JPanel panel2 = new JPanel();
+		panel2 = new JPanel();
 		panel2.setBounds(0, 300, 500, 200);
 		panel2.add(new JLabel("News Feed", SwingConstants.CENTER));
 		panel2.setBackground(Color.white);
 		
 		//Add components to frame
+		frame.add(refreshButton);
 		frame.add(followUserTextField);
 		frame.add(followUserButton);
 		frame.add(tweetMessageTextField);
@@ -100,25 +115,66 @@ public class UserView extends JPanel implements ActionListener{
 		frame.add(panel);
 		frame.add(panel2);
 		
-		
-		
+		setCurrUser(); //Set curr user and see if they exist
 	}
 
+	User getCurrUser() {
+		return this.user;
+	}
+	
+	public void setUserViewList(List<UserView> userViewList) {
+		this.userViewList = userViewList;
+	}
+	
+	void setCurrUser() {
+		this.adminInstance = Admin.getInstance();
+		this.allUsers = this.adminInstance.getUser();
+		
+		//Cast current user 
+		 for(SystemEntry user : allUsers) {				 
+			 if(this.currUser.equals(user.toString())) {
+				 this.user = (User) user;	//cast to User 
+				 System.out.println("User is: " + user.toString());
+			 }
+		 }
+	}
+	
+	void refresh() {
+		scrollPanel2.removeAll(); //remove to update
+		
+		//Get list of messages
+		this.messages = this.user.getMessages();
+		
+		//Display on user's news feed
+		JScrollPane scroll = new JScrollPane(new JList(this.messages.toArray()));
+		scroll.setPreferredSize(new Dimension(450, 150));
+		scrollPanel2.add(scroll);
+		
+		//Add scroll component 
+		frame.setVisible(true);
+		panel2.add(scrollPanel2);
+		panel2.revalidate();
+		panel2.repaint();
+	}
+	
+	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == followUserButton) {
 			scrollPanel.removeAll(); //remove to update
 			
-			this.adminInstance = Admin.getInstance();
-			this.allUsers = this.adminInstance.getUser();
+//			this.adminInstance = Admin.getInstance();
+//			this.allUsers = this.adminInstance.getUser();
 			
-			//Cast current user 
-			 for(SystemEntry user : allUsers) {				 
-				 if(this.currUser.equals(user.toString())) {
-					 this.user = (User) user;	//cast to User 
-					 System.out.println("User is: " + user.toString());
-				 }
-			 }
+			
+//			//Cast current user 
+//			 for(SystemEntry user : allUsers) {				 
+//				 if(this.currUser.equals(user.toString())) {
+//					 this.user = (User) user;	//cast to User 
+//					 System.out.println("User is: " + user.toString());
+//				 }
+//			 }
 			 
 			//Get what is in entered in text field and make sure whoever the user wants to follow exists
 			 for(SystemEntry user : allUsers) {				
@@ -143,6 +199,55 @@ public class UserView extends JPanel implements ActionListener{
 				 }
 			 }
 		}
+		else if (e.getSource() == tweetMessageButton) {
+			scrollPanel2.removeAll(); //remove to update
+			
+			//User posts a message
+			this.user.postMessage(tweetMessageTextField.getText());
+			
+			//Get list of messages
+			this.messages = this.user.getMessages();
+			
+			//Display on user's news feed
+			JScrollPane scroll = new JScrollPane(new JList(this.messages.toArray()));
+			scroll.setPreferredSize(new Dimension(450, 150));
+			scrollPanel2.add(scroll);
+			
+			//Add scroll component 
+			frame.setVisible(true);
+			panel2.add(scrollPanel2);
+			panel2.revalidate();
+			panel2.repaint();
+			
+
+			System.out.println("CURRENT USER: " + this.currUser);
+			for(UserView u: userViewList) {
+				System.out.println("VIEW LIST" + u.getCurrUser().toString());
+				if(this.currUser.equals(u.getCurrUser().toString())) {
+					System.out.println("THIS USER POSTED" + u.getCurrUser().toString());
+					
+				}
+				else {
+					this.followers = this.getCurrUser().getFollowers();
+					for(int i = 0; i < this.followers.size(); i++) {
+						System.out.println("UPDATE FOLLOWERS NEWS FEED: " + this.followers.get(i));
+						
+						//If any users equals to the current's users followers, than update the followers
+						if(u.getCurrUser().toString().equals(this.followers.get(i))) {
+							u.refresh();
+						}
+					
+					}
+				}
+			}
+			
+		}
+		else if (e.getSource() == refreshButton) {
+			refresh();
+		}
+
 		
 	}
+	
+	
 }

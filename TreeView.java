@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -45,9 +46,14 @@ public class TreeView extends JPanel implements ActionListener {
     
     private Admin adminInstance;
     
+    private List<UserView> userViewList;
+    
+    
     public TreeView() {
         super(new BorderLayout());
-         
+        
+        this.userViewList = new ArrayList<UserView>();
+        
         //Create the components.
         treePanel = new DynamicTree();        
 //        populateTree(treePanel);
@@ -135,8 +141,7 @@ public class TreeView extends JPanel implements ActionListener {
         add(panel2, BorderLayout.EAST);
     }
     
-  
-    
+
     
     public void populateTree(DynamicTree treePanel) {        
 //    	DefaultMutableTreeNode root = null;
@@ -173,7 +178,7 @@ public class TreeView extends JPanel implements ActionListener {
    public String getUserGroup() {
 	   return addGroupTextField.getText();
    }
-        
+    
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         
@@ -225,7 +230,11 @@ public class TreeView extends JPanel implements ActionListener {
    
         	 if(parentPath != null) {
         		//Open up user view window when pressed and pass currently selected user
-              	UserView userViewWindow = new UserView(parentPath.getPathComponent(1).toString());
+              	UserView newUserView = new UserView(parentPath.getPathComponent(1).toString());
+              	
+              	userViewList.add(newUserView);	//list of created user view windows
+              	newUserView.setUserViewList(userViewList);	//set user view list 
+              	
         	 }
         	 else {
         		 System.out.println("No user selected");
