@@ -58,6 +58,15 @@ public class Admin extends TreeView implements SystemEntry{
     	return this.user;
     }
     
+    
+    /*
+     * Get the total amount of messages
+     * @return int the message total
+     */
+    public int getMessageTotal() {
+    	return this.currentUser.getTotalMessages();
+    }
+    
     //Composite methods
 	@Override
 	public int getTotalUsers() {

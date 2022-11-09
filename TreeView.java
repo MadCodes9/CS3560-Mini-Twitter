@@ -230,7 +230,7 @@ public class TreeView extends JPanel implements ActionListener {
    
         	 if(parentPath != null) {
         		//Open up user view window when pressed and pass currently selected user
-              	UserView newUserView = new UserView(parentPath.getPathComponent(1).toString());
+              	UserView newUserView = new UserView(parentPath.getLastPathComponent().toString());
               	
               	userViewList.add(newUserView);	//list of created user view windows
               	newUserView.setUserViewList(userViewList);	//set user view list 
@@ -258,6 +258,11 @@ public class TreeView extends JPanel implements ActionListener {
         	System.out.println("Group total button");
         }
         else if(e.getSource() == messageTotalButton) {
+        	//Get singleton instance from Admin
+        	this.adminInstance = Admin.getInstance();
+        	
+        	//Pop-up message
+        	JOptionPane.showMessageDialog(null, this.adminInstance.getMessageTotal(),"Total Message(s)", JOptionPane.PLAIN_MESSAGE);
         	System.out.println("Message total button");
         }
         else if(e.getSource() == percentageButton) {

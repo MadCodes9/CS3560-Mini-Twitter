@@ -121,6 +121,7 @@ public class User implements SystemEntry, Observer{
 	 */
 	public void postMessage(String message) {
 		String post;
+		numOfMessages++;	//increase total message size
 		
 		//Current user should be able to see their own post in News Feed
 		post = getId() + ": " + message;
@@ -144,6 +145,8 @@ public class User implements SystemEntry, Observer{
 			System.out.println("No message");
 		}
 		else {
+			numOfMessages++; //update total message when updated in followers feed
+			
 			post = sender + ": " + message;
 			this.message.add(post);
 			Arrays.asList(this.message);
