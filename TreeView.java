@@ -42,6 +42,10 @@ public class TreeView extends JPanel implements ActionListener {
     private JButton messageTotalButton;
     private JButton percentageButton;
     
+    //Assignment 3 buttons 
+    private JButton verification;
+    private JButton lastUpdatedUser;
+    
     private Admin adminInstance;
     
     private List<UserView> userViewList;
@@ -106,6 +110,14 @@ public class TreeView extends JPanel implements ActionListener {
         percentageButton = new JButton("Show Positive Percentage");
         percentageButton.addActionListener(this);
         
+        //User/Group ID Verification Button
+        verification = new JButton("Verification");
+        verification.addActionListener(this);
+
+        //Last updated user Button
+        lastUpdatedUser = new JButton("Last Update");
+        lastUpdatedUser.addActionListener(this);
+        
  
         //Lay everything out.
         treePanel.setPreferredSize(new Dimension(300, 150));
@@ -124,6 +136,8 @@ public class TreeView extends JPanel implements ActionListener {
         panel2.add(groupTotalButton);
         panel2.add(messageTotalButton);
         panel2.add(percentageButton);
+        panel2.add(verification);
+        panel2.add(lastUpdatedUser);
         add(panel, BorderLayout.SOUTH);  
         add(panel2, BorderLayout.EAST);
     }
@@ -219,13 +233,47 @@ public class TreeView extends JPanel implements ActionListener {
               System.out.println("ITEM: " + item);
             }
             
+            
             float positivePercentage = this.adminInstance.getPositivePercentage();
            
             
         	//Pop-up message
         	JOptionPane.showMessageDialog(null, positivePercentage,"Positive Percentage(%)", JOptionPane.PLAIN_MESSAGE);
         	System.out.println("Positive percentage button");
-        } 
+       } 
+       else if(e.getSource() == verification) {
+    	   this.adminInstance = Admin.getInstance();
+    	   
+    	   //A list of all the created users
+    	   List<SystemEntry> users = this.adminInstance.getUser();
+    	   
+    	   //Total users created
+    	   int totalUsers = this.adminInstance.getTotalUsers();
+//    	   
+//    	   for(int i = 0; i < totalUsers; i++) {
+//    		   
+//    		   System.out.println(users.get(i));
+//    	   }
+    	   
+    	   List<SystemEntry> duplicates = new ArrayList<SystemEntry>();
+    	   List<SystemEntry> uniques = new ArrayList<SystemEntry>();
+
+    	    for(SystemEntry u : users) {
+    	        if(!uniques.add(u)) {
+    	            duplicates.add(u);
+    	        }
+    	    }
+
+    	   System.out.println("Duplicates found: " + duplicates);
+    	  
+    	   
+    	   
+    	   System.out.println("Verification button");
+       }
+       else if(e.getSource() == lastUpdatedUser) {
+    	   
+    		System.out.println("Last updated user button");
+       }
     }
  
     /**
