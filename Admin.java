@@ -11,6 +11,7 @@ import java.util.List;
 public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
 	private List<SystemEntry> user;
 	private List<SystemEntry> userGroup;
+	private List<String> userList;
 	private User currentUser;
 	protected static Admin adminInstance;
 	private static float totalPositiveFound = 0;
@@ -20,6 +21,7 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
     public Admin() {
     	user = new ArrayList<SystemEntry>();
     	userGroup = new ArrayList<SystemEntry>();
+    	userList = new ArrayList<String>();
     }
     
     /*
@@ -39,6 +41,7 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
     public void addUser(String user) {
     	this.currentUser = new User(user);
     	this.user.add(this.currentUser);
+    	this.userList.add(user);
 		System.out.println("Total users: " + getTotalUsers());
 	 	System.out.println("Added " + user + " user");
 	}
@@ -150,5 +153,23 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
 		// do nothing
 		
 	}
+
+	@Override
+	public boolean validate(String id) {
+		
+		//Is not valid
+		if(id.contains(" ")) {
+			return false;
+		}
+		if(userList.contains(id)) {
+			return false;
+		}
+		else {
+			//Is valid 
+			return true; 
+		}
+	}
+	
+	
 
 }

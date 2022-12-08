@@ -6,8 +6,12 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -53,6 +57,8 @@ public class TreeView extends JPanel implements ActionListener {
     
     //normal shopping cart stuff
     private ArrayList<Visitable> items;
+    
+    private boolean isValid;
     
     public TreeView() {
         super(new BorderLayout());
@@ -158,6 +164,9 @@ public class TreeView extends JPanel implements ActionListener {
         	 //Get singleton instance from TreeView
         	this.adminInstance = Admin.getInstance();
         	
+          	//Validate user to check if duplicated or has space
+        	isValid = this.adminInstance.validate(addUserTextField.getText());
+        	
          	//Pass user text-field text to admin, so admin can create a new user 
         	this.adminInstance.addUser(addUserTextField.getText());
         	
@@ -244,30 +253,7 @@ public class TreeView extends JPanel implements ActionListener {
        else if(e.getSource() == verification) {
     	   this.adminInstance = Admin.getInstance();
     	   
-    	   //A list of all the created users
-    	   List<SystemEntry> users = this.adminInstance.getUser();
-    	   
-    	   //Total users created
-    	   int totalUsers = this.adminInstance.getTotalUsers();
-//    	   
-//    	   for(int i = 0; i < totalUsers; i++) {
-//    		   
-//    		   System.out.println(users.get(i));
-//    	   }
-    	   
-    	   List<SystemEntry> duplicates = new ArrayList<SystemEntry>();
-    	   List<SystemEntry> uniques = new ArrayList<SystemEntry>();
-
-    	    for(SystemEntry u : users) {
-    	        if(!uniques.add(u)) {
-    	            duplicates.add(u);
-    	        }
-    	    }
-
-    	   System.out.println("Duplicates found: " + duplicates);
-    	  
-    	   
-    	   
+    	   System.out.println(isValid);
     	   System.out.println("Verification button");
        }
        else if(e.getSource() == lastUpdatedUser) {
