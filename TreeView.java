@@ -186,6 +186,9 @@ public class TreeView extends JPanel implements ActionListener {
        	 	//Get singleton instance from Admin
         	this.adminInstance = Admin.getInstance();
         	
+        	//Validate user group to check if duplicated or has space
+        	isValid = this.adminInstance.validate(addGroupTextField.getText());
+        	
          	//Pass user text-field text to admin, so admin can create a new user group
         	this.adminInstance.addUserGroup(addGroupTextField.getText());
         	
@@ -252,13 +255,24 @@ public class TreeView extends JPanel implements ActionListener {
        } 
        else if(e.getSource() == verification) {
     	   this.adminInstance = Admin.getInstance();
-    	   
-    	   System.out.println(isValid);
+    	  
+    	   //There are no duplicate ids or spaces 
+    	   if(isValid == true) {
+    		   System.out.println("User id is valid");
+    	   }
+    	   else {
+    		  //Pop-up message
+    		  JOptionPane.showMessageDialog(null, "The id either contains a space or is already taken", "Not Valid", JOptionPane.ERROR_MESSAGE);
+          	  System.out.println("User id is not valid");   
+    		   	
+    	   }
     	   System.out.println("Verification button");
        }
-       else if(e.getSource() == lastUpdatedUser) {
-    	   
-    		System.out.println("Last updated user button");
+       else if(e.getSource() == lastUpdatedUser) {    	   
+    	   //Pop-up message
+       	   JOptionPane.showMessageDialog(null, "On the console", "Last Updated User", JOptionPane.PLAIN_MESSAGE);
+    	  
+       	   System.out.println("Last updated user button");
        }
     }
  

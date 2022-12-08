@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,8 @@ public class UserView extends JPanel implements ActionListener{
     private JTextField tweetMessageTextField;
     private JPanel panel;
     private JPanel panel2; 
+    private JPanel panel3;
+    private JPanel panel4;
     private List<SystemEntry> allUsers;
     private User user;
     private User followUser;
@@ -43,6 +46,7 @@ public class UserView extends JPanel implements ActionListener{
 	
 	private List<String> followers;
 	private List<String> messages;
+	private String lastUpdateTime;
 	private JPanel scrollPanel = new JPanel();
 	private JPanel scrollPanel2 = new JPanel();
 	
@@ -53,6 +57,9 @@ public class UserView extends JPanel implements ActionListener{
 	UserView(String selectedUser){
 		this.userViewList = new ArrayList<UserView>();
 		this.currUser = selectedUser;
+		
+		//Set curr user
+		setCurrUser();
 		
 		//Lay everything out.
 		frame = new JFrame(this.currUser);
@@ -86,7 +93,7 @@ public class UserView extends JPanel implements ActionListener{
 		
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(new Dimension(500, 550));
+		frame.setSize(new Dimension(500, 600));
 		frame.setLayout(null);
 		frame.setVisible(true);
 		frame.setBackground(Color.white);
@@ -99,10 +106,20 @@ public class UserView extends JPanel implements ActionListener{
 		
 		
 		panel2 = new JPanel();
-		panel2.setBounds(0, 300, 500, 200);
+		panel2.setBounds(0, 340, 500, 200);
 		panel2.add(new JLabel("News Feed", SwingConstants.CENTER));
 		panel2.setBackground(Color.white);
 		
+		//Panel for creation time
+        panel3 = new JPanel();
+        panel3.setBounds(0, 290, 520, 20);
+		panel3.add(new JLabel("Creation Time: " + getCreationTime(), SwingConstants.CENTER));
+		
+		
+		//Panel for last update time
+        panel4 = new JPanel();
+        panel4.setBounds(0, 309, 520, 20);
+        
 		//Add components to frame
 		frame.add(refreshButton);
 		frame.add(followUserTextField);
@@ -111,10 +128,34 @@ public class UserView extends JPanel implements ActionListener{
 		frame.add(tweetMessageButton);
 		frame.add(panel);
 		frame.add(panel2);
+		frame.add(panel3);
+		frame.add(panel4);
 		
-		setCurrUser(); //Set curr user and see if they exist
 	}
 
+	//Get the last creation time of user 
+	String getCreationTime() {
+		if(this.user == null) {
+			return "Printed in console";
+		}
+		else {
+			return this.user.getCreationTime().toString();
+		}
+	}
+	
+	//Get the last update time of user
+	String getLastUpdateTime() {
+		if(this.user == null) {
+			return "Printed in console";
+		}
+		else if( this.user.getLastUpdateTime() == null) {
+			return "N/A";
+		}
+		else {
+			return this.user.getLastUpdateTime().toString();
+		}
+	}
+	
 	User getCurrUser() {
 		return this.user;
 	}
@@ -138,14 +179,23 @@ public class UserView extends JPanel implements ActionListener{
 	
 	void refresh() {
 		scrollPanel2.removeAll(); //remove to update
+		panel4.removeAll(); //remove last update time to update panel
 		
 		//Get list of messages
 		this.messages = this.user.getMessages();
+		
+		//Update the last update time 
+		getLastUpdateTime();
 		
 		//Display on user's news feed
 		JScrollPane scroll = new JScrollPane(new JList(this.messages.toArray()));
 		scroll.setPreferredSize(new Dimension(450, 150));
 		scrollPanel2.add(scroll);
+		
+		//Panel for last update time
+		panel4.add(new JLabel("Last Update Time: " + getLastUpdateTime(), SwingConstants.CENTER));
+		panel4.revalidate();
+		panel4.repaint();
 		
 		//Add scroll component 
 		frame.setVisible(true);
@@ -153,7 +203,6 @@ public class UserView extends JPanel implements ActionListener{
 		panel2.revalidate();
 		panel2.repaint();
 	}
-	
 	
 	
 	@Override
@@ -186,6 +235,7 @@ public class UserView extends JPanel implements ActionListener{
 		}
 		else if (e.getSource() == tweetMessageButton) {
 			scrollPanel2.removeAll(); //remove to update
+			panel4.removeAll(); //remove last update time to update panel
 			
 			//User posts a message
 			this.user.postMessage(tweetMessageTextField.getText());
@@ -197,6 +247,12 @@ public class UserView extends JPanel implements ActionListener{
 			JScrollPane scroll = new JScrollPane(new JList(this.messages.toArray()));
 			scroll.setPreferredSize(new Dimension(450, 150));
 			scrollPanel2.add(scroll);
+			
+		
+			panel4.add(new JLabel("Last Update Time: " + getLastUpdateTime(), SwingConstants.CENTER));
+			panel4.revalidate();
+			panel4.repaint();
+			
 			
 			//Add scroll component 
 			frame.setVisible(true);
@@ -211,10 +267,11 @@ public class UserView extends JPanel implements ActionListener{
 				else {
 					this.followers = this.getCurrUser().getFollowers();
 					for(int i = 0; i < this.followers.size(); i++) {
-						System.out.println("UPDATE FOLLOWERS NEWS FEED: " + this.followers.get(i));
+						System.out.println("Update followers news feed: " + this.followers.get(i));
 						
 						//If any users equals to the current's users followers, than update the followers
 						if(u.getCurrUser().toString().equals(this.followers.get(i))) {
+							
 							u.refresh();
 						}
 					}

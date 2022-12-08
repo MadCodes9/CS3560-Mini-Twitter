@@ -1,3 +1,4 @@
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +16,10 @@ public class User implements SystemEntry, Observer, Visitable{
 	private List<String> listOfFollowers;
 	private List<String> listOfMessages;
 	private TwitterNewsFeed twitterNewsFeed;
+	
+	private Timestamp creationTime;
+	private Timestamp lastUpdateTime;
+	private String lastUpdateUser;
 
 	public User(String id){
 		super();
@@ -27,7 +32,7 @@ public class User implements SystemEntry, Observer, Visitable{
 		
 		numOfUsers++;
 	}
-	
+		
 	/*
 	 * Getter method for user id 
 	 * return String
@@ -50,6 +55,47 @@ public class User implements SystemEntry, Observer, Visitable{
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	
+	/*
+	 * Setter method for creation time of user
+	 */
+	public void setCreationTime(Timestamp creationTime) {
+		this.creationTime = creationTime;
+	}
+	
+	/*
+	 * Getter method for creation time of user
+	 * return  Timestamp the  last update time 
+	 */
+	public Timestamp getCreationTime() {
+		return creationTime;
+	}
+	
+
+	/*
+	 * Setter method for last update time of user
+	 */
+	public void setLastUpdateTime(Timestamp lastUpdateTime) {
+		this.lastUpdateTime = lastUpdateTime;
+	}
+	
+	/*
+	 * Getter method for last update time of user post
+	 * return Timestamp the  last update time 
+	 */
+	public Timestamp getLastUpdateTime() {
+		return lastUpdateTime;
+	}
+	
+	/*
+	 * Getter method for last update user
+	 * return String the  last update user 
+	 */
+	public String getLastUpdateUser() {
+		return lastUpdateUser;
+	}
+	
 	
 	/*
 	 * Current user follows another user and store in hash map 
@@ -104,6 +150,14 @@ public class User implements SystemEntry, Observer, Visitable{
 		String post;
 		numOfMessages++;	//increase total message size
 		
+		//Last update time is set when user posts a message 
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		setLastUpdateTime(timestamp);
+		System.out.println("UPDATE TIME: " + getLastUpdateTime());	
+		
+		//last updated user
+		lastUpdateUser = getId();
+		
 		//Current user should be able to see their own post in News Feed
 		post = getId() + ": " + message;
 		this.message.add(post);
@@ -111,10 +165,9 @@ public class User implements SystemEntry, Observer, Visitable{
 		
 		//Add messages to current user 
 		messages.put(getId(), this.message);
-		
-		System.out.println(getId() + " posted on topic: " + message);			
-	    twitterNewsFeed.notifyObservers(getId(), message);  
-	    
+		  
+		System.out.println("LAST UPDATED USER: " + getId());			
+	    twitterNewsFeed.notifyObservers(getId(), message, getLastUpdateTime());  
 	    twitterNewsFeed.displayNewsFeed(messages);
 	}
 	
@@ -123,7 +176,7 @@ public class User implements SystemEntry, Observer, Visitable{
 	 * @param String the current user, String the follower to be updates, String the message to be updated
 	 */
 	@Override
-	public void update(String sender, String obs, String message) {
+	public void update(String sender, String obs, String message, Timestamp lastUpdateTime) {
 		String post;
 
 		if(message == null) {
@@ -139,8 +192,12 @@ public class User implements SystemEntry, Observer, Visitable{
 			//Add messages to current user 
 			messages.put(obs, this.message);
 			
-			System.out.println("Message to " + obs + " from " + sender + ": " + message);
+			//Update to in followers feed of last time updated
+			setLastUpdateTime(lastUpdateTime);
 			
+			System.out.println("Message to " + obs + " from " + sender + ": " + message);
+			System.out.println("FOLLWER LAST UPDATE TIME: " + getLastUpdateTime());
+		
 		}		
 	}
 	

@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Map.Entry;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,13 +19,14 @@ public class TwitterNewsFeed implements Subject{
 		this.observers = new ArrayList<>();
 	}
 	
+	
 	/*
 	 * Display the current news feed for debugging purposes
 	 * @param HashMap<String, List<String>> the String of users and List of messages
 	 */
 	public void displayNewsFeed(HashMap<String, List<String>> messages) {
 		System.out.println("= News Feed =");
-		messages.entrySet().forEach(entry -> {
+		messages.entrySet().forEach(entry -> {			
 		    System.out.println(entry.getKey() + ": " + entry.getValue());
 		});
 		
@@ -53,12 +55,12 @@ public class TwitterNewsFeed implements Subject{
 	 * @param String the current user, String the message to be updated 
 	 */
 	@Override
-	public void notifyObservers(String sender, String message) {
+	public void notifyObservers(String sender, String message, Timestamp lastUpdateTime ) {
 		System.out.println("Notified followers");
 		
 		if(!observers.isEmpty() && observers != null) {
 			for (Observer obs : observers) {
-				obs.update(sender, obs.toString(), message);
+				obs.update(sender, obs.toString(), message, lastUpdateTime);
 			}
 			
 		}

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Timestamp;
 
 /**
  * 
@@ -12,7 +13,9 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
 	private List<SystemEntry> user;
 	private List<SystemEntry> userGroup;
 	private List<String> userList;
+	private List<String> userGroupList;
 	private User currentUser;
+	private UserGroup currentUserGroup;
 	protected static Admin adminInstance;
 	private static float totalPositiveFound = 0;
 	
@@ -22,6 +25,7 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
     	user = new ArrayList<SystemEntry>();
     	userGroup = new ArrayList<SystemEntry>();
     	userList = new ArrayList<String>();
+    	userGroupList =  new ArrayList<String>();
     }
     
     /*
@@ -42,6 +46,11 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
     	this.currentUser = new User(user);
     	this.user.add(this.currentUser);
     	this.userList.add(user);
+    	
+    	//Set the creation time for user
+     	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    	this.currentUser.setCreationTime(timestamp);
+    	
 		System.out.println("Total users: " + getTotalUsers());
 	 	System.out.println("Added " + user + " user");
 	}
@@ -50,7 +59,14 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
      * Add a new user group, obtaining the data from the text-field 
      */
     public void addUserGroup(String userGroup) {
-    	this.userGroup.add(new UserGroup(userGroup));
+    	this.currentUserGroup = new UserGroup(userGroup);
+    	this.userGroup.add(this.currentUserGroup);
+    	this.userGroupList.add(userGroup);
+    	
+    	//Set the creation time for user group 
+    	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    	this.currentUserGroup.setCreationTime(timestamp);
+    
     	System.out.println("Total user groups: " + getTotalUserGroups());
     	System.out.println("Added " + userGroup + " user group");
     }
@@ -156,12 +172,11 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
 
 	@Override
 	public boolean validate(String id) {
-		
 		//Is not valid
 		if(id.contains(" ")) {
 			return false;
 		}
-		if(userList.contains(id)) {
+		if(userList.contains(id) || userGroupList.contains(id)) {
 			return false;
 		}
 		else {
@@ -170,6 +185,14 @@ public class Admin extends TreeView implements SystemEntry, UserTypeVisitor{
 		}
 	}
 	
+	//Get the last user update
+	public String getLastUpdatedUser() {
+		if(currentUser.getLastUpdateUser() == null) {
+			return "N/A";
+		}
+		else {
+			return currentUser.getLastUpdateUser();
+		}
+	}
 	
-
 }

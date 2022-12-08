@@ -1,3 +1,4 @@
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,24 @@ public class UserGroup implements SystemEntry, Visitable {
 	private String id;
 	private static int numOfUserGroups = 0;
 	private List<User> userGroup;
+	private Timestamp creationTime;
 
+	/*
+	 * Setter method for creation time of user group
+	 */
+	public void setCreationTime(Timestamp creationTime) {
+		this.creationTime = creationTime;
+		System.out.println("Creation time for user group: " + this.creationTime);
+	}
+	
+	/*
+	 * Getter method for creation time of user group
+	 * return long the creation time
+	 */
+	public Timestamp getCreationTime() {
+		return creationTime;
+	}
+	
 	public UserGroup(String id){
 		super();
 		this.id = id;
@@ -65,4 +83,6 @@ public class UserGroup implements SystemEntry, Visitable {
 	public void accept(UserTypeVisitor visitor) {
 		visitor.visit(this);
 	}
+	
+	
 }
